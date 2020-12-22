@@ -436,7 +436,7 @@ function update() {
 ```
 ## setTimeout 
 ```js
-//setTimeout 只执行一次，而色图Interval执行多次
+//setTimeout 只执行一次，而setInterval执行多次
 function hello() {
     console.log("setTimeout");
 }
@@ -483,7 +483,21 @@ console.log(arr1)
 - ^开头   $结尾
 - | 或    ()先运算
 - 正则内想要写一些原本正则里面有意义的字符 需要加上转义符 \
-
+- 汉字的匹配 
+    ```js
+    var re = /[\u4e00-\u9fa5]/
+    console.log('\u4e00', '\u9fa5')
+    console.log(re.test('哈'))
+    // 一 龥（笔画最多和最少的）  
+    // true(所有汉字)
+    ```
+- 创建带变量的正则
+```js
+var str = '1231'
+var re = new RegExp('^' + str + '$')
+console.log(re)
+//   /^[0-9]1231$/
+```
 ## 正则表达式的使用
 ```js
 // .test -->返回Boolean     .exec  -->返回Object 详细结果  null
@@ -565,4 +579,69 @@ console.log(str.slice(0, 3))
 var str2 = '1-2-345-6'
 console.log(str2.split('-'))
 // ["1", "2", "345", "6"]
+```
+7. toFixed 将数字变成字符串并且使用四舍五入的方式保留几位小数,**原值不变**
+```js
+var num=0.1+0.2
+console.log(num)
+// 浮点型运算 运算的误差 0.000000000004 左右   四舍五入可以去掉
+ var num1 = num.toFixed(2)
+ console.log(num1,num)
+ // 0.30  0.30000000000000004
+```
+## 原生 dom document 
+- 浏览器对象 提供了js访问页面的一些接口(方法) 
+- document  整个文档(页面) 还是一个对象该对象下存储了很多方法用来操作页面
+    ```js
+    console.log(window.document)
+    // 输出的是整个页面的代码
+    ```
+- window 的一些方法 setInterval setTimeout console alert(弹出)...
+- 其实我们写的所有的全局变量和全局函数都是属于浏览对象的给浏览器对象创建的 全局变量相当于 window 的属性 全局函数相当于 window 的方法
+    ```js
+    var num = 10
+    console.log(window.num)
+    function fun() {
+        console.log(11)
+    }
+    window.fun()
+    // 10   11
+    ```
+## document 方法
+```js
+document.getElementById('id') 
+// 通过 id 名获取 **只能获取一个**
+document.getElementsByTagName('标签名')
+// 通过标签名获取 获取的一个**类数组** 里面存的是真正的节点
+document.getElementsByClassName('class名') 
+// 通过class名获取 获取的一个**类数组** 里面存的是真正的节点
+document.getElementsByName('name名') 
+// 通过name名获取 获取的一个**类数组** 里面存的是真正的节点
+document.querySelector('.box') 
+// 通过css选择器获取 **只能获取第一个**
+document.querySelectorAll('css 选择器')
+// 通过css选择器获取 获取的一个**类数组** 里面存的是真正的节点
+```
+## document 获取和设置属性 
+- getAttribute  setAttribut（和 jquery 的 attr 类似）
+- 用法 getAttribute('属性名')  setAttribute('属性名',属性值)
+```js
+var btnArr = document.querySelectorAll('.btn')
+for (var i = 0; i < btnArr.length; i++) {
+    document.querySelectorAll('.btn')[i].onclick = function () {
+    console.log(this.getAttribute('data-index'))
+    this.setAttribute('title', '哈哈哈')
+    document.querySelector('.box').style.width = '500px'
+    document.querySelector('.box').style.background = 'linear-gradient(#ccc,#666)'
+    }
+}
+```
+## document 事件
+- 原生dom对象.onclick = function(){}
+- onclick  onmouseenter  onmouseleave  onblur  onfocus ....
+```js
+document.querySelectorAll('.btn')[0].onclick = function () {
+    document.querySelector('.box').style.width = '500px'
+    document.querySelector('.box').style.background = 'linear-gradient(#ccc,#333)'
+}
 ```
